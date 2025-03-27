@@ -1,0 +1,22 @@
+<header>
+  <nav class="top-nav">
+    <div class="nav-left">
+      {% for item in config.extra.nav_items %}
+      <a class="nav-link" href="{{ get_url(path=item.url) }}"
+        >{{ item.name }}</a
+      >
+      {% endfor %}
+    </div>
+    {% if config.extra.resume %}
+    <div class="nav-right">
+      <a
+        class="nav-link resume-link"
+        href="{{ get_url(path=config.extra.resume) }}"
+      >
+        <img class="book-icon" src="/images/book.svg" alt="" />
+        Resume
+      </a>
+    </div>
+    {% endif %}
+  </nav>
+</header>

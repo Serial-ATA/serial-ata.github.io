@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="project-detail">
+  <div class="project-header">
+    <div class="title-row">
+      {% if page.extra.logo %}
+        <img class="project-icon" src="/images/projects/{{ page.extra.logo }}" alt="{{ page.title }} logo" />
+      {% endif %}
+      <h1>{{ page.title }}</h1>
+    </div>
+    {% if page.extra.start_date %}
+      <span class="project-date">
+        <em>
+          {{ page.extra.start_date }} - {% if page.extra.end_date %}{{ page.extra.end_date }}{% else %} Present {% endif %}
+        </em>
+      </span>
+    {% endif %}
+    {% if page.extra.socials is defined %}
+      <div class="project-links">
+        {% for platform, url in page.extra.socials %}
+          <a href="{{ url }}">
+            <img class="social" src="/images/social/{{ platform }}.svg" alt="{{ platform }}" />
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+  <section class="project-description">
+    {{ page.content | safe }}
+  </section>
+</article>
+{% endblock content %}

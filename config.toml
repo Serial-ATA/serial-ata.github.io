@@ -1,0 +1,36 @@
+base_url = "https://www.sata.lol"
+author = "Serial-ATA"
+compile_sass = true
+build_search_index = false
+
+[markdown]
+highlight_code = true
+render_emoji = true
+external_links_target_blank = true
+smart_punctuation = true
+
+[extra]
+real_name = "Alex"
+resume = "resume.pdf"
+
+nav_items = [
+    { name = "Home", url = "/" },
+    { name = "Projects", url = "/projects" },
+    { name = "Blog", url = "/blog" },
+]
+bio = "Rust developer"
+
+[[extra.socials]]
+name = "GitHub"
+url = "https://github.com/Serial-ATA"
+icon = "github.svg"
+
+[[extra.socials]]
+name = "LinkedIn"
+url = "https://www.linkedin.com/in/alex-mcclain-b7108530b/"
+icon = "linkedin.svg"
+
+[[extra.socials]]
+name = "Email"
+url = "mailto:job@sata.contact"
+icon = "email.svg"

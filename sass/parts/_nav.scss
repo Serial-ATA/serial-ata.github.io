@@ -1,0 +1,64 @@
+header {
+  background: #111;
+  padding: 1rem 0;
+
+  .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    .nav-left {
+      display: flex;
+      gap: 1.5rem;
+      flex: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      padding: 0.5rem;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #e91e63;
+      }
+
+      // Underline effect on hover
+      &:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 2px;
+        background: #e91e63;
+        transition: width 0.3s ease;
+      }
+
+      &:hover:after {
+        width: 100%;
+      }
+    }
+
+    .resume-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .book-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+    }
+  }
+}

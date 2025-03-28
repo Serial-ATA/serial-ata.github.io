@@ -1,4 +1,4 @@
-base_url = "https://sata.lol"
+base_url = "https://www.sata.lol"
 author = "Serial-ATA"
 compile_sass = true
 build_search_index = false

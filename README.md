@@ -11,7 +11,7 @@ at your option.
 
 The written content in the `content/` directory (e.g., blog posts, articles, and other non-code material) is licensed under the  
 **Creative Commons Attribution 4.0 International License (CC BY 4.0)**  
-([LICENSE-CONTENT](context/LICENSE) or https://creativecommons.org/licenses/by/4.0/).
+([LICENSE-CONTENT](content/LICENSE) or https://creativecommons.org/licenses/by/4.0/).
 
 ## Contribution
 

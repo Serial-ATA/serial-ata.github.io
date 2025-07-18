@@ -3,6 +3,7 @@ title = "JVM"
 description = "A from-scratch implementation of the Java Virtual Machine, Java SE 23 Edition."
 
 [extra]
+type = "independent"
 start_date = "Oct 2022"
 
 [extra.socials]

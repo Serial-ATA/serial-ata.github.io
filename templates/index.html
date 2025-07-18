@@ -1,20 +1,32 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block body_class %}landing-page{% endblock body_class %}
+{% block content %}
 <div id="landing">
-  <div id="pfp-container">
-    <img src="images/pfp.png" alt="Serial-ATA profile picture" />
-  </div>
-  <h2 id="author">{{ config.author }} ({{config.extra.real_name}})</h2>
-  <pre id="bio">{{ config.extra.bio }}</pre>
-  <div id="socials-container">
-    {% for social in config.extra.socials %}
-    <a class="social-link" href="{{ social.url }}">
-      <img
-        class="social"
-        src="images/social/{{ social.icon }}"
-        alt="{{ social.name }}"
-      />
-    </a>
-    {% endfor %}
-  </div>
+    <div id="pfp-container">
+        <img src="images/pfp.png" alt="{{ config.author }} profile picture" />
+    </div>
+    <h2 id="author">{{ config.author }} ({{config.extra.real_name}})</h2>
+    <pre id="bio">{{ config.extra.bio }}</pre>
+    <div id="socials-container">
+        {% for social in config.extra.socials %}
+        <a class="social-link" href="{{ social.url }}">
+            <img class="social" src="images/social/{{ social.icon }}" alt="{{ social.name }}" />
+        </a>
+        {% endfor %}
+    </div>
+
+  <div id="featured-projects">
+        <h3>Featured Projects</h3>
+         <div class="featured-cards">
+            {% set projects_section = get_section(path="projects/_index.md") %}
+
+            {% for project in projects_section.pages | filter(attribute="extra.type", value="independent") | slice(end=3) %}
+              <a href="{{ project.permalink }}" class="featured-card">
+                <h4>{{ project.title }}</h4>
+                <p>{{ project.description | truncate(length=100) }}</p>
+              </a>
+            {% endfor %}
+      </div>
+    </div>
 </div>
 {% endblock content %}

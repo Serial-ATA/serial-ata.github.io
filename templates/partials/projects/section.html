@@ -1,0 +1,10 @@
+<div class="projects-list {{ section_type }}">
+  <h2>{{ section_title }}</h2>
+  <div class="project-cards">
+    {% for project in section.pages %}
+      {% if project.extra.type == section_type %}
+        {% include "partials/projects/card.html" %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

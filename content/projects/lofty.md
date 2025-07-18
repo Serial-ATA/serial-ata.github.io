@@ -2,8 +2,8 @@
 title = "Lofty"
 description = "An audio metadata library written in Rust that supports all major audio formats."
 [extra]
+type = "independent"
 start_date = "Dec 2020"
-logo = "lofty.svg"
 
 [extra.socials]
 github = "https://github.com/Serial-ATA/lofty-rs"

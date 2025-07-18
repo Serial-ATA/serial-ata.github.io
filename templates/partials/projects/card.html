@@ -1,0 +1,29 @@
+<div class="project-card">
+  <a class="card-link" href="{{ project.permalink }}">
+    {% if project.extra.logo %}
+      <img class="project-icon" src="/images/projects/{{ project.extra.logo }}" alt="{{ project.title }} logo" />
+    {% else %}
+      <div class="project-icon-placeholder"></div>
+    {% endif %}
+    <div class="project-card-text">
+      <h3 class="project-name">{{ project.title }}</h3>
+      {% if project.extra.start_date %}
+        <span class="project-date">
+          <em>
+            {{ project.extra.start_date }} {% if project.extra.end_date is defined %}- {{ project.extra.end_date }}{% else %}- Present{% endif %}
+          </em>
+        </span>
+      {% endif %}
+      <p class="project-description">{{ project.description }}</p>
+    </div>
+  </a>
+  {% if project.extra.socials %}
+    <div class="project-links">
+      {% for platform, url in project.extra.socials %}
+        <a href="{{ url }}">
+          <img class="social" src="/images/social/{{ platform }}.svg" alt="{{ platform }}" />
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

@@ -3,6 +3,7 @@ title = "lyr"
 description = "A tool to download and embed lyrics from multiple sources."
 
 [extra]
+type = "independent"
 start_date = "Jul 2022"
 end_date = "Jan 2023"
 

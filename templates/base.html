@@ -16,8 +16,9 @@
       media="screen"
       href="{{ get_url(path='main.css') }}"
     />
+    <script src="/js/main.js" defer></script>
   </head>
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     {% include "partials/nav.html" %}
     <main>{% block content %}{% endblock %}</main>
     {% include "partials/footer.html" %}

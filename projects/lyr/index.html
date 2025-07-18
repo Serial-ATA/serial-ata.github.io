@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Homepage for Serial-ATA"
+    />
+    <meta name="author" content="Serial-ATA" />
+    <title>Serial-ATA</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="https://www.sata.lol/main.css"
+    />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body class="">
+    <header>
+  <nav class="top-nav">
+    <div class="nav-left">
+      
+      <a class="nav-link" href="https://www.sata.lol"
+        >Home</a
+      >
+      
+      <a class="nav-link" href="https://www.sata.lol/projects"
+        >Projects</a
+      >
+      
+      <a class="nav-link" href="https://www.sata.lol/blog"
+        >Blog</a
+      >
+      
+    </div>
+    
+    <div class="nav-right">
+      <a
+        class="nav-link resume-link"
+        href="https://www.sata.lol/resume.pdf"
+      >
+        <img class="book-icon" src="/images/book.svg" alt="" />
+        Resume
+      </a>
+    </div>
+    
+  </nav>
+</header>
+
+    <main>
+<article class="project-detail">
+  <div class="project-header">
+    <div class="title-row">
+      
+      <h1>lyr</h1>
+    </div>
+    
+      <span class="project-date">
+        <em>
+          Jul 2022 - Jan 2023
+        </em>
+      </span>
+    
+    
+      <div class="project-links">
+        
+          <a href="https:&#x2F;&#x2F;github.com&#x2F;Serial-ATA&#x2F;lyr">
+            <img class="social" src="/images/social/github.svg" alt="github" />
+          </a>
+        
+          <a href="https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;lyr">
+            <img class="social" src="/images/social/crates.svg" alt="crates" />
+          </a>
+        
+      </div>
+    
+  </div>
+  <section class="project-description">
+    <p>A CLI tool to download song lyrics from multiple sources, and optionally embed them into audio files.</p>
+<h2 id="sources">Sources</h2>
+<p>The following sources are supported:</p>
+<ul>
+<li><a rel="noopener" target="_blank" href="https://azlyrics.com">AZLyrics</a></li>
+<li><a rel="noopener" target="_blank" href="https://genius.com">Genius</a></li>
+<li><a rel="noopener" target="_blank" href="https://jah-lyrics.com">JahLyrics</a></li>
+<li><a rel="noopener" target="_blank" href="https://www.musixmatch.com">Musixmatch</a></li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>Print the lyrics to stdout:</p>
+<pre data-lang="console" style="background-color:#2b303b;color:#c0c5ce;" class="language-console "><code class="language-console" data-lang="console"><span>$ lyr --artist=&quot;Lynyrd Skynyrd&quot; --title=&quot;Free Bird&quot;
+</span></code></pre>
+<p>Output the lyrics to a file:</p>
+<pre data-lang="console" style="background-color:#2b303b;color:#c0c5ce;" class="language-console "><code class="language-console" data-lang="console"><span>$ lyr --artist=&quot;Lynyrd Skynyrd&quot; --title=&quot;Free Bird&quot; lyrics.txt
+</span></code></pre>
+<p>Determine the artist and title from a file, and embed the lyrics into it:</p>
+<pre data-lang="console" style="background-color:#2b303b;color:#c0c5ce;" class="language-console "><code class="language-console" data-lang="console"><span>$ lyr --input=&quot;some-music-file.mp3&quot;
+</span></code></pre>
+
+  </section>
+</article>
+</main>
+    <footer class="license-flyout">
+    <button id="license-toggle" class="license-toggle" aria-label="Toggle license information">
+        ©
+    </button>
+
+    <div id="license-content" class="license-content">
+        <p xmlns:cc="http://creativecommons.org/ns/">
+            <a rel="cc:attributionURL" href="https:&#x2F;&#x2F;www.sata.lol">This work</a> by
+            <span property="cc:attributionName">Serial-ATA</span> is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer">
+                CC BY 4.0
+                <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+                <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+            </a>
+        </p>
+    </div>
+</footer>
+
+  </body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Homepage for Serial-ATA"
+    />
+    <meta name="author" content="Serial-ATA" />
+    <title>Serial-ATA</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="https://www.sata.lol/main.css"
+    />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body class="">
+    <header>
+  <nav class="top-nav">
+    <div class="nav-left">
+      
+      <a class="nav-link" href="https://www.sata.lol"
+        >Home</a
+      >
+      
+      <a class="nav-link" href="https://www.sata.lol/projects"
+        >Projects</a
+      >
+      
+      <a class="nav-link" href="https://www.sata.lol/blog"
+        >Blog</a
+      >
+      
+    </div>
+    
+    <div class="nav-right">
+      <a
+        class="nav-link resume-link"
+        href="https://www.sata.lol/resume.pdf"
+      >
+        <img class="book-icon" src="/images/book.svg" alt="" />
+        Resume
+      </a>
+    </div>
+    
+  </nav>
+</header>
+
+    <main>
+<article class="project-detail">
+  <div class="project-header">
+    <div class="title-row">
+      
+      <h1>Lofty</h1>
+    </div>
+    
+      <span class="project-date">
+        <em>
+          Dec 2020 -  Present 
+        </em>
+      </span>
+    
+    
+      <div class="project-links">
+        
+          <a href="https:&#x2F;&#x2F;github.com&#x2F;Serial-ATA&#x2F;lofty-rs">
+            <img class="social" src="/images/social/github.svg" alt="github" />
+          </a>
+        
+          <a href="https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;lofty">
+            <img class="social" src="/images/social/crates.svg" alt="crates" />
+          </a>
+        
+          <a href="https:&#x2F;&#x2F;docs.rs&#x2F;lofty">
+            <img class="social" src="/images/social/docsrs.svg" alt="docsrs" />
+          </a>
+        
+      </div>
+    
+  </div>
+  <section class="project-description">
+    <p>A crate to handle reading and writing audio metadata in a generic, unified way.</p>
+<h1 id="supported-formats">Supported Formats</h1>
+<p>See the table at https://github.com/Serial-ATA/lofty-rs/blob/main/lofty/SUPPORTED_FORMATS.md.</p>
+<h1 id="usage">Usage</h1>
+<p>It can be used in two ways:</p>
+<h2 id="generic">Generic</h2>
+<p>Lofty provides a generic <code>Tag</code> type that all metadata formats can be converted into. It allows you to no longer have to think of the underlying format (ID3v2, Vorbis Comments, etc.).</p>
+<p>This means that reading a file for simple tasks (e.g. getting the title, artist, and album for a music player) can simply be done with the following:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">let</span><span> file = lofty::read_from_path(&quot;</span><span style="color:#a3be8c;">path/to/file.mp3</span><span>&quot;)?;
+</span><span>
+</span><span style="color:#b48ead;">let</span><span> tag = </span><span style="color:#b48ead;">match</span><span> tagged_file.</span><span style="color:#96b5b4;">primary_tag</span><span>() {
+</span><span>    Some(primary_tag) =&gt; primary_tag,
+</span><span>    </span><span style="color:#65737e;">// If the &quot;primary&quot; tag doesn&#39;t exist, we just grab the
+</span><span>    </span><span style="color:#65737e;">// first tag we can find. Realistically, a tag reader would likely
+</span><span>    </span><span style="color:#65737e;">// iterate through the tags to find a suitable one.
+</span><span>    None =&gt; tagged_file.</span><span style="color:#96b5b4;">first_tag</span><span>().</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">ERROR: No tags found!</span><span>&quot;),
+</span><span>};
+</span><span>
+</span><span style="color:#b48ead;">let</span><span> title = tag.</span><span style="color:#96b5b4;">title</span><span>();
+</span><span style="color:#b48ead;">let</span><span> artist = tag.</span><span style="color:#96b5b4;">artist</span><span>();
+</span><span style="color:#b48ead;">let</span><span> album = tag.</span><span style="color:#96b5b4;">album</span><span>();
+</span></code></pre>
+<p>And that’s all!</p>
+<h2 id="concrete-formats">Concrete Formats</h2>
+<p>Of course, some formats (such as ID3v2) have lots of niche features, that can’t be exposed in the generic API. That’s where you can reach for concrete types:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span>lofty::mpeg::MpegFile;
+</span><span>
+</span><span style="color:#b48ead;">let</span><span> file = MpegFile::read_from_path(&quot;</span><span style="color:#a3be8c;">path/to/file.mp3</span><span>&quot;)?;
+</span><span style="color:#b48ead;">let</span><span> id3v2_tag = file.</span><span style="color:#96b5b4;">id3v2_tag</span><span>().</span><span style="color:#96b5b4;">unwrap</span><span>();
+</span><span>
+</span><span style="color:#b48ead;">let</span><span> title = id3v2_tag.</span><span style="color:#96b5b4;">title</span><span>();
+</span></code></pre>
+<p>Regardless of the path you choose (generic or concrete), the types can easily be converted to each other:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">let</span><span> generic_tag: Tag = </span><span style="color:#65737e;">/* ... */
+</span><span style="color:#b48ead;">let</span><span> concrete_tag: Id3v2Tag = generic_tag.</span><span style="color:#96b5b4;">into</span><span>();
+</span><span>
+</span><span style="color:#65737e;">// Then...
+</span><span style="color:#b48ead;">let</span><span> generic_tag: Tag = concrete_tag.</span><span style="color:#96b5b4;">into</span><span>();
+</span></code></pre>
+
+  </section>
+</article>
+</main>
+    <footer class="license-flyout">
+    <button id="license-toggle" class="license-toggle" aria-label="Toggle license information">
+        ©
+    </button>
+
+    <div id="license-content" class="license-content">
+        <p xmlns:cc="http://creativecommons.org/ns/">
+            <a rel="cc:attributionURL" href="https:&#x2F;&#x2F;www.sata.lol">This work</a> by
+            <span property="cc:attributionName">Serial-ATA</span> is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer">
+                CC BY 4.0
+                <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+                <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+            </a>
+        </p>
+    </div>
+</footer>
+
+  </body>
+</html>

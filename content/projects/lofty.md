@@ -11,59 +11,62 @@ crates = "https://crates.io/crates/lofty"
 docsrs = "https://docs.rs/lofty"
 +++
 
-A crate to handle reading and writing audio metadata in a generic, unified way.
+`Lofty` is a comprehensive, production-ready audio metadata crate. It was created to solve a critical gap in the Rust ecosystem, which previously lacked a single, reliable crate for handling the myriad of complex audio formats and their metadata standards.
 
-# Supported Formats
+-----
 
-See the table at https://github.com/Serial-ATA/lofty-rs/blob/main/lofty/SUPPORTED_FORMATS.md.
+## The Problem
 
-# Usage
+Back in 2019, I just wanted to build an [ncmpcpp]-inspired music player in Rust. Unfortunately, to handle metadata, I ended up having to glue together a bunch of format-specific crates (one for WAV, another for FLAC, etc.). That introduced a few problems:
 
-It can be used in two ways:
+* The dependency list *blew up*
+* I needed to know all of the format-specific field names
+* Whenever I needed access to another field, I would need to update the logic for *all* supported formats
 
-## Generic
+So, I started Lofty as a hobby: I wanted to build the one library that would handle all of it. It gives you a single, clean
+API to read and write metadata (ID3, Vorbis comments, APE, etc.) and get audio properties (duration, bitrate) from pretty
+much any major audio format (MP3, FLAC, WAV, etc.).
 
-Lofty provides a generic `Tag` type that all metadata formats can be converted into. It allows you to no longer have to think of the underlying format (ID3v2, Vorbis Comments, etc.).
+The whole point is to make it simple for the developer. They can pass in any file and Lofty figures it all out, handing
+them back a simple abstract `Tag` that they can query for information such as the artist or title. All of that without needing
+to know the format of the file they initially passed in.
 
-This means that reading a file for simple tasks (e.g. getting the title, artist, and album for a music player) can simply be done with the following:
+-----
 
-```rust
-let file = lofty::read_from_path("path/to/file.mp3")?;
+## Architecture
 
-let tag = match tagged_file.primary_tag() {
-    Some(primary_tag) => primary_tag,
-    // If the "primary" tag doesn't exist, we just grab the
-    // first tag we can find. Realistically, a tag reader would likely
-    // iterate through the tags to find a suitable one.
-    None => tagged_file.first_tag().expect("ERROR: No tags found!"),
-};
+The most important design decision in the entire project was decoupling the metadata from the physical file, via the abstract `Tag` type.
 
-let title = tag.title();
-let artist = tag.artist();
-let album = tag.album();
-```
+Unlike most libraries I'd seen, where a tag is intrinsically linked to its source file, I designed the `Tag` as an
+independent, portable data structure.
 
-And that's all!
+This made complex workflows pretty simple. A developer can, for example, read a `Tag` from an MP3, modify it in memory, and
+write it directly to a FLAC file without writing any format-specific translation logic. It makes tasks like library migrations
+or batch updates trivial.
 
-## Concrete Formats
+-----
 
-Of course, some formats (such as ID3v2) have lots of niche features, that can't be exposed in the generic API. That's where you can reach for concrete types:
+## The Unfortunate State of Audio
 
-```rust
-use lofty::mpeg::MpegFile;
+It turns out the digital audio world is a complete mess. Lofty was originally a fully spec-compliant parser, but that doesn't
+work in the real world.
 
-let file = MpegFile::read_from_path("path/to/file.mp3")?;
-let id3v2_tag = file.id3v2_tag().unwrap();
+I've spent countless hours reverse-engineering files created by other popular software, finding all the weird ways they
+were broken, and then implementing hacks and workarounds in my parsers to handle them.
 
-let title = id3v2_tag.title();
-```
+But that introduces another issue: hiding potential errors from the users. Not every user will *want* the parser to guess
+their intent. So, I eventually introduced a set of parsing modes to give that control to developers:
 
-Regardless of the path you choose (generic or concrete), the types can easily be converted to each other:
+* Strict: For purely spec-compliant files. It will eagerly error on any non-spec-compliant input.
+* BestAttempt (Default): This is the mode for 99% of users. It tries to recover from errors (like bad text encoding) by filling in blanks (e.g., an empty string or a 0) without failing the whole parse.
+* Relaxed: This is the most aggressive mode. It will discard any field it can't read and just return the best partial tag it can from even the most mangled files.
 
-```rust
-let generic_tag: Tag = /* ... */
-let concrete_tag: Id3v2Tag = generic_tag.into();
+-----
 
-// Then...
-let generic_tag: Tag = concrete_tag.into();
-```
+## Where It is Today
+
+It's now used in over 400 public GitHub projects and over 40 published crates, and has crossed one million downloads
+on [crates.io]. It's been amazing to see it grow over the years.
+
+[ncmpcpp]: https://github.com/ncmpcpp/ncmpcpp
+[crates.io]: https://crates.io

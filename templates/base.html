@@ -19,8 +19,12 @@
     <script src="/js/main.js" defer></script>
   </head>
   <body class="{% block body_class %}{% endblock %}">
-    {% include "partials/nav.html" %}
-    <main>{% block content %}{% endblock %}</main>
+    <main>
+        {% include "partials/nav.html" %}
+        <article>
+            {% block content %}{% endblock %}
+        </article>
+    </main>
     {% include "partials/footer.html" %}
   </body>
 </html>

@@ -1,0 +1,15 @@
+$background-color: #0a0a0a;
+$content-color: #e0e0e0;
+$nav-color: #eb5959;
+$article-padding: 20px;
+$article-border-color: #232323;
+
+:root {
+  --article-width: 100%;
+}
+
+@media all and (min-width: 960px) {
+  :root {
+    --article-width: 75%;
+  }
+}

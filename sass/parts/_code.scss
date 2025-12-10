@@ -1,0 +1,35 @@
+pre[class^="language-"] {
+  padding: 1rem;
+  overflow: auto;
+  border-radius: 0.4rem;
+  font-size: 1.1rem;
+  max-width: min(93%, 50rem);
+  margin-inline: auto;
+  margin-block: 1.8rem;
+}
+
+pre[class^="language-"] code {
+  white-space: pre;
+  tab-size: 2;
+}
+
+pre[data-linenos] {
+  padding: 1rem 0;
+}
+pre[class^="language-"] table td {
+  padding: 0;
+}
+
+pre[class^="language-"] table td:nth-of-type(1) {
+  text-align: center;
+  vertical-align: top;
+  user-select: none;
+}
+pre[class^="language-"] mark {
+  display: block;
+  background-color: rgba(254, 252, 232, 0.9);
+}
+pre[class^="language-"] table {
+  width: 100%;
+  border-collapse: collapse;
+}

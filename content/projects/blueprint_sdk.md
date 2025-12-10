@@ -4,6 +4,7 @@ description = "A powerful toolkit for building distributed systems and infrastru
 [extra]
 type = "professional"
 start_date = "Aug 2024"
+end_date = "Aug 2025"
 
 [extra.socials]
 github = "https://github.com/tangle-network/blueprint"

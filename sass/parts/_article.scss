@@ -1,0 +1,12 @@
+@import "_vars.scss";
+
+article {
+  width: var(--article-width);
+  height: 100%;
+  margin: 0 auto;
+  padding: $article-padding $article-padding 0;
+  background: #0f0f0f;
+  border: 1px solid $article-border-color;
+  border-top: none;
+  border-bottom: none;
+}

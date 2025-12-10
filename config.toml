@@ -18,7 +18,10 @@ nav_items = [
     { name = "Projects", url = "/projects" },
     { name = "Blog", url = "/blog" },
 ]
-bio = "Rust developer"
+bio = """
+I'm Alex, also known as Serial-ATA.
+
+I'm a software engineer and open source maintainer with nearly a decade of experience."""
 
 [[extra.socials]]
 name = "GitHub"

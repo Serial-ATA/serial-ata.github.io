@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Homepage for Serial-ATA"
+    />
+    <meta name="author" content="Serial-ATA" />
+    <title>Serial-ATA</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="https://www.sata.lol/main.css"
+    />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body class="">
+    <main>
+        <div class="top-nav">
+    <nav>
+        <div class="nav-left">
+            
+            <a class="nav-link" href="https://www.sata.lol">
+                Home
+            </a>
+            
+            <a class="nav-link" href="https://www.sata.lol/projects">
+                Projects
+            </a>
+            
+            <a class="nav-link" href="https://www.sata.lol/blog">
+                Blog
+            </a>
+            
+        </div>
+        
+        <div class="nav-right">
+            <a
+                    class="nav-link resume-link"
+                    href="https://www.sata.lol/resume.pdf"
+            >
+                <img class="book-icon" src="/images/book.svg" alt="" />
+                Resume
+            </a>
+        </div>
+        
+    </nav>
+</div>
+
+        <article>
+            
+<div class="project-header">
+<div class="title-row">
+  
+  <h1>Lofty</h1>
+</div>
+
+  <span class="project-date">
+    <em>
+      Dec 2020 -  Present 
+    </em>
+  </span>
+
+
+  <div class="project-links">
+    
+      <a href="https://crates.io/crates/lofty">
+        <img class="social" src="/images/social/crates.svg" alt="crates" />
+      </a>
+    
+      <a href="https://docs.rs/lofty">
+        <img class="social" src="/images/social/docsrs.svg" alt="docsrs" />
+      </a>
+    
+      <a href="https://github.com/Serial-ATA/lofty-rs">
+        <img class="social" src="/images/social/github.svg" alt="github" />
+      </a>
+    
+  </div>
+
+</div>
+<section class="project-description">
+<p><code>Lofty</code> is a comprehensive, production-ready audio metadata crate. It was created to solve a critical gap in the Rust ecosystem, which previously lacked a single, reliable crate for handling the myriad of complex audio formats and their metadata standards.</p>
+<hr />
+<h2 id="the-problem">The Problem</h2>
+<p>Back in 2019, I just wanted to build an <a rel="noopener external" target="_blank" href="https://github.com/ncmpcpp/ncmpcpp">ncmpcpp</a>-inspired music player in Rust. Unfortunately, to handle metadata, I ended up having to glue together a bunch of format-specific crates (one for WAV, another for FLAC, etc.). That introduced a few problems:</p>
+<ul>
+<li>The dependency list <em>blew up</em></li>
+<li>I needed to know all of the format-specific field names</li>
+<li>Whenever I needed access to another field, I would need to update the logic for <em>all</em> supported formats</li>
+</ul>
+<p>So, I started Lofty as a hobby: I wanted to build the one library that would handle all of it. It gives you a single, clean
+API to read and write metadata (ID3, Vorbis comments, APE, etc.) and get audio properties (duration, bitrate) from pretty
+much any major audio format (MP3, FLAC, WAV, etc.).</p>
+<p>The whole point is to make it simple for the developer. They can pass in any file and Lofty figures it all out, handing
+them back a simple abstract <code>Tag</code> that they can query for information such as the artist or title. All of that without needing
+to know the format of the file they initially passed in.</p>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<p>The most important design decision in the entire project was decoupling the metadata from the physical file, via the abstract <code>Tag</code> type.</p>
+<p>Unlike most libraries I’d seen, where a tag is intrinsically linked to its source file, I designed the <code>Tag</code> as an
+independent, portable data structure.</p>
+<p>This made complex workflows pretty simple. A developer can, for example, read a <code>Tag</code> from an MP3, modify it in memory, and
+write it directly to a FLAC file without writing any format-specific translation logic. It makes tasks like library migrations
+or batch updates trivial.</p>
+<hr />
+<h2 id="the-unfortunate-state-of-audio">The Unfortunate State of Audio</h2>
+<p>It turns out the digital audio world is a complete mess. Lofty was originally a fully spec-compliant parser, but that doesn’t
+work in the real world.</p>
+<p>I’ve spent countless hours reverse-engineering files created by other popular software, finding all the weird ways they
+were broken, and then implementing hacks and workarounds in my parsers to handle them.</p>
+<p>But that introduces another issue: hiding potential errors from the users. Not every user will <em>want</em> the parser to guess
+their intent. So, I eventually introduced a set of parsing modes to give that control to developers:</p>
+<ul>
+<li>Strict: For purely spec-compliant files. It will eagerly error on any non-spec-compliant input.</li>
+<li>BestAttempt (Default): This is the mode for 99% of users. It tries to recover from errors (like bad text encoding) by filling in blanks (e.g., an empty string or a 0) without failing the whole parse.</li>
+<li>Relaxed: This is the most aggressive mode. It will discard any field it can’t read and just return the best partial tag it can from even the most mangled files.</li>
+</ul>
+<hr />
+<h2 id="where-it-is-today">Where It is Today</h2>
+<p>It’s now used in over 400 public GitHub projects and over 40 published crates, and has crossed one million downloads
+on <a rel="noopener external" target="_blank" href="https://crates.io">crates.io</a>. It’s been amazing to see it grow over the years.</p>
+
+</section>
+
+        </article>
+    </main>
+    <footer class="license-flyout">
+    <button id="license-toggle" class="license-toggle" aria-label="Toggle license information">
+        ©
+    </button>
+
+    <div id="license-content" class="license-content">
+        <p xmlns:cc="http://creativecommons.org/ns/">
+            <a rel="cc:attributionURL" href="https://www.sata.lol">This work</a> by
+            <span property="cc:attributionName">Serial-ATA</span> is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer">
+                CC BY 4.0
+                <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+                <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+            </a>
+        </p>
+    </div>
+</footer>
+
+  </body>
+</html>

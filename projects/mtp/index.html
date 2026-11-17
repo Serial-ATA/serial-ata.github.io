@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Homepage for Serial-ATA"
+    />
+    <meta name="author" content="Serial-ATA" />
+    <title>Serial-ATA</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="https://www.sata.lol/main.css"
+    />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body class="">
+    <main>
+        <div class="top-nav">
+    <nav>
+        <div class="nav-left">
+            
+            <a class="nav-link" href="https://www.sata.lol">
+                Home
+            </a>
+            
+            <a class="nav-link" href="https://www.sata.lol/projects">
+                Projects
+            </a>
+            
+            <a class="nav-link" href="https://www.sata.lol/blog">
+                Blog
+            </a>
+            
+        </div>
+        
+        <div class="nav-right">
+            <a
+                    class="nav-link resume-link"
+                    href="https://www.sata.lol/resume.pdf"
+            >
+                <img class="book-icon" src="/images/book.svg" alt="" />
+                Resume
+            </a>
+        </div>
+        
+    </nav>
+</div>
+
+        <article>
+            
+<div class="project-header">
+<div class="title-row">
+  
+  <h1>MTP</h1>
+</div>
+
+  <span class="project-date">
+    <em>
+      Aug 2024 -  Present 
+    </em>
+  </span>
+
+
+  <div class="project-links">
+    
+      <a href="https://crates.io/crates/mtp">
+        <img class="social" src="/images/social/crates.svg" alt="crates" />
+      </a>
+    
+      <a href="https://github.com/Serial-ATA/mtp">
+        <img class="social" src="/images/social/github.svg" alt="github" />
+      </a>
+    
+  </div>
+
+</div>
+<section class="project-description">
+<p>A pure-Rust implementation of <abbr title="Media Transfer Protocol">MTP</abbr></p>
+<hr />
+<h2 id="the-problem">The Problem</h2>
+<h3 id="what-is-mtp">What is MTP?</h3>
+<p><abbr title="Media Transfer Protocol">MTP</abbr> is a generic protocol allowing different mobile devices (e.g. smartphones, tablets, cameras)
+to perform different operations, primarily sending and receiving files.</p>
+<p>An MTP session simply consists of:</p>
+<ul>
+<li>Sending operations and their data, and waiting for responses</li>
+<li>Handling interrupts from the device
+<ul>
+<li>At any time, the device can send events, notifying the user of any updates to the device’s state (e.g. a file was deleted)</li>
+</ul>
+</li>
+</ul>
+<p><em>For more details, check out the <a rel="noopener external" target="_blank" href="https://en.wikipedia.org/wiki/Media_Transfer_Protocol">Wikipedia Article</a></em></p>
+<h3 id="what-this-crate-does">What This Crate Does</h3>
+<p>This crate tries to provide the simplest API for interacting with MTP devices. Here’s an example program that will find
+all connected MTP-eligible USB devices and print out their storage devices.</p>
+<pre class="giallo" style="color: #D5CED9; background-color: #23262E;" ><code data-lang="rust"><span class="giallo-l"><span style="color: #C74DED;">async fn</span><span style="color: #FFE66D;"> print_all_storages</span><span>()</span><span style="color: #EE5D43;"> -&gt;</span><span> mtp</span><span style="color: #EE5D43;">::</span><span>error</span><span style="color: #EE5D43;">::</span><span style="color: #FFE66D;">Result</span><span>&lt;()&gt; {</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  // Discover all MTP-eligible devices</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  let mut</span><span style="color: #00E8C6;"> all_mtp_devices</span><span style="color: #EE5D43;"> =</span><span> mtp</span><span style="color: #EE5D43;">::</span><span style="color: #00E8C6;">usb</span><span style="color: #EE5D43;">:</span><span style="color: #FFE66D;">device_list</span><span>()</span><span style="color: #EE5D43;">?</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  for</span><span style="color: #00E8C6;"> maybe_device</span><span style="color: #C74DED;"> in</span><span style="color: #00E8C6;"> all_mtp_devices</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">    let</span><span style="color: #00E8C6;"> device</span><span style="color: #EE5D43;"> =</span><span style="color: #00E8C6;"> maybe_device</span><span style="color: #EE5D43;">?</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #FFE66D;">    println!</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #96E072;">      &quot;Storages for device &#39;</span><span style="color: #F92672;">{</span><span style="color: #96E072;">:?</span><span style="color: #F92672;">}</span><span style="color: #96E072;">&#39;:&quot;</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">      device</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">info</span><span>()</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">product_string</span><span>()</span></span>
+<span class="giallo-l"><span>    );</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">    // Open a new session</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">    let</span><span> (</span><span style="color: #C74DED;">mut</span><span style="color: #00E8C6;"> handle</span><span>,</span><span style="color: #00E8C6;"> session_id</span><span>)</span><span style="color: #EE5D43;"> =</span><span style="color: #00E8C6;"> device</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">open</span><span>()</span><span style="color: #EE5D43;">.</span><span style="color: #C74DED;">await</span><span style="color: #EE5D43;">?</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">    // Perform operations within the session</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">    // (fetching all storage descriptors)</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">    let</span><span style="color: #00E8C6;"> all_storages</span><span style="color: #EE5D43;"> =</span><span style="color: #00E8C6;"> handle</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">storages</span><span>(</span><span style="color: #00E8C6;">session_id</span><span>)</span><span style="color: #EE5D43;">.</span><span style="color: #C74DED;">await</span><span style="color: #EE5D43;">?</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C74DED;">    for</span><span style="color: #00E8C6;"> storage</span><span style="color: #C74DED;"> in</span><span style="color: #00E8C6;"> all_storages</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #FFE66D;">      println!</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #96E072;">        &quot;</span><span style="color: #F92672;">{}</span><span style="color: #96E072;"> (</span><span style="color: #F92672;">{}</span><span style="color: #96E072;">/</span><span style="color: #F92672;">{}</span><span style="color: #96E072;"> bytes free)&quot;</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">        storage</span><span style="color: #EE5D43;">.</span><span>description</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">unwrap_or</span><span>(String</span><span style="color: #EE5D43;">::</span><span style="color: #FFE66D;">from</span><span>(</span><span style="color: #96E072;">&quot;Unnamed&quot;</span><span>)),</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">        storage</span><span style="color: #EE5D43;">.</span><span>free_space,</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">        storage</span><span style="color: #EE5D43;">.</span><span>max_capacity</span></span>
+<span class="giallo-l"><span>      )</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #FFE66D;">  Ok</span><span>(())</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<p>The project is made up of two crates: <code>mtp</code> and <code>mtp_spec</code></p>
+<h3 id="the-protocol-layer-mtp-spec">The Protocol Layer (<code>mtp_spec</code>)</h3>
+<p><code>mtp_spec</code> is a <code>#![no_std]</code> implementation of all <abbr title="Media Transfer Protocol">MTP</abbr> structures, operations,
+responses, and events.</p>
+<h3 id="the-transport-layer-mtp">The Transport Layer (<code>mtp</code>)</h3>
+<p><code>mtp</code> provides the actual USB transport layer (device discovery, USB packet encoding/decoding).</p>
+<h4 id="transport-implementations">Transport Implementations</h4>
+<p>While MTP is traditionally used over USB, I designed the <code>mtp_spec</code> crate to be transport-agnostic via the <code>PtpIo</code> trait.
+This allows users to (almost trivially) implement alternative transport layers (e.g. Wi-Fi) by implementing the following:</p>
+<pre class="giallo" style="color: #D5CED9; background-color: #23262E;" ><code data-lang="rust"><span class="giallo-l"><span style="color: #C74DED;">pub trait</span><span style="color: #FFE66D;"> PtpIo</span><span style="color: #EE5D43;">:</span><span style="color: #FFE66D;"> Send</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// Implementation-specific errors that can occur during I/O operations</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  type</span><span style="color: #FFE66D;"> Error</span><span style="color: #EE5D43;">:</span><span> core</span><span style="color: #EE5D43;">::</span><span>error</span><span style="color: #EE5D43;">::</span><span style="color: #FFE66D;">Error</span><span style="color: #EE5D43;"> +</span><span style="color: #FFE66D;"> From</span><span>&lt;</span><span style="color: #FFE66D;">MtpError</span><span>&gt;;</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// Implementation-specific event stream, see [`Self::event_stream()`]</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  type</span><span style="color: #FFE66D;"> EventStream</span><span style="color: #EE5D43;">:</span><span style="color: #FFE66D;"> Stream</span><span>&lt;</span><span style="color: #FFE66D;">Item</span><span style="color: #EE5D43;"> =</span><span style="color: #FFE66D;"> Result</span><span>&lt;</span><span style="color: #FFE66D;">Event</span><span>,</span><span style="color: #00E8C6;"> Self</span><span style="color: #EE5D43;">::</span><span style="color: #FFE66D;">Error</span><span>&gt;&gt;;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// Get the next transaction ID</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  ///</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// While not required, the resulting ID **should** be used in the next operation, to keep the</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// transaction IDs monotonically increasing.</span></span>
+<span class="giallo-l"><span>  #[must_use]</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  fn</span><span style="color: #FFE66D;"> next_transaction_id</span><span>(</span><span style="color: #EE5D43;">&amp;</span><span style="color: #C74DED;">mut</span><span style="color: #00E8C6;"> self</span><span>)</span><span style="color: #EE5D43;"> -&gt;</span><span style="color: #FFE66D;"> TransactionId</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// Get the next session ID</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  ///</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// While not required, the resulting ID **should** be used in the next operation, to keep the</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// session IDs monotonically increasing.</span></span>
+<span class="giallo-l"><span>  #[must_use]</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  fn</span><span style="color: #FFE66D;"> next_session_id</span><span>(</span><span style="color: #EE5D43;">&amp;</span><span style="color: #C74DED;">mut</span><span style="color: #00E8C6;"> self</span><span>)</span><span style="color: #EE5D43;"> -&gt;</span><span style="color: #FFE66D;"> SessionId</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// Get the endianness of the current device</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  ///</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// The value of this is expected to be consistent for the duration of the session.</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  fn</span><span style="color: #FFE66D;"> endian</span><span>(</span><span style="color: #EE5D43;">&amp;</span><span style="color: #00E8C6;">self</span><span>)</span><span style="color: #EE5D43;"> -&gt;</span><span style="color: #FFE66D;"> Endian</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// Get an instance of the responder -&gt; initiator event stream</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  ///</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// This is used by the responder to send important updates (object modifications, property changes, etc.)</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">  /// at any time.</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  fn</span><span style="color: #FFE66D;"> event_stream</span><span>(</span><span style="color: #EE5D43;">&amp;</span><span style="color: #00E8C6;">self</span><span>)</span><span style="color: #EE5D43;"> -&gt;</span><span style="color: #00E8C6;"> Self</span><span style="color: #EE5D43;">::</span><span style="color: #FFE66D;">EventStream</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C74DED;">  fn</span><span style="color: #FFE66D;"> __send_operation</span><span>&lt;</span><span style="color: #FFE66D;">O</span><span>&gt;(</span></span>
+<span class="giallo-l"><span style="color: #EE5D43;">    &amp;</span><span style="color: #C74DED;">mut</span><span style="color: #00E8C6;"> self</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    operation</span><span style="color: #EE5D43;">:</span><span style="color: #FFE66D;"> O</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    data</span><span style="color: #EE5D43;">:</span><span style="color: #FFE66D;"> Option</span><span>&lt;</span><span style="color: #FFE66D;">Vec</span><span>&lt;</span><span style="color: #FFE66D;">u8</span><span>&gt;&gt;,</span></span>
+<span class="giallo-l"><span>  )</span><span style="color: #EE5D43;"> -&gt;</span><span style="color: #C74DED;"> impl</span><span style="color: #FFE66D;"> Future</span><span>&lt;</span><span style="color: #FFE66D;">Output</span><span style="color: #EE5D43;"> =</span><span style="color: #FFE66D;"> Result</span><span>&lt;</span><span style="color: #FFE66D;">Response</span><span>&lt;</span><span style="color: #FFE66D;">O</span><span>&gt;,</span><span style="color: #00E8C6;"> Self</span><span style="color: #EE5D43;">::</span><span style="color: #FFE66D;">Error</span><span>&gt;&gt;</span><span style="color: #EE5D43;"> +</span><span style="color: #FFE66D;"> Send</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">  where</span></span>
+<span class="giallo-l"><span style="color: #FFE66D;">    O</span><span style="color: #EE5D43;">:</span><span style="color: #FFE66D;"> DynOperation</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">    for</span><span>&lt;&#39;</span><span style="color: #FFE66D;">a</span><span>&gt;</span><span style="color: #FFE66D;"> SerializedOperation</span><span>&lt;&#39;</span><span style="color: #FFE66D;">a</span><span>&gt;</span><span style="color: #EE5D43;">:</span><span style="color: #FFE66D;"> From</span><span>&lt;</span><span style="color: #EE5D43;">&amp;</span><span>&#39;</span><span style="color: #FFE66D;">a O</span><span>&gt;;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+</section>
+
+        </article>
+    </main>
+    <footer class="license-flyout">
+    <button id="license-toggle" class="license-toggle" aria-label="Toggle license information">
+        ©
+    </button>
+
+    <div id="license-content" class="license-content">
+        <p xmlns:cc="http://creativecommons.org/ns/">
+            <a rel="cc:attributionURL" href="https://www.sata.lol">This work</a> by
+            <span property="cc:attributionName">Serial-ATA</span> is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer">
+                CC BY 4.0
+                <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+                <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+            </a>
+        </p>
+    </div>
+</footer>
+
+  </body>
+</html>

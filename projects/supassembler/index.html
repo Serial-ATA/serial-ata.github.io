@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Homepage for Serial-ATA"
+    />
+    <meta name="author" content="Serial-ATA" />
+    <title>Serial-ATA</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="https://www.sata.lol/main.css"
+    />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body class="">
+    <main>
+        <div class="top-nav">
+    <nav>
+        <div class="nav-left">
+            
+            <a class="nav-link" href="https://www.sata.lol">
+                Home
+            </a>
+            
+            <a class="nav-link" href="https://www.sata.lol/projects">
+                Projects
+            </a>
+            
+            <a class="nav-link" href="https://www.sata.lol/blog">
+                Blog
+            </a>
+            
+        </div>
+        
+        <div class="nav-right">
+            <a
+                    class="nav-link resume-link"
+                    href="https://www.sata.lol/resume.pdf"
+            >
+                <img class="book-icon" src="/images/book.svg" alt="" />
+                Resume
+            </a>
+        </div>
+        
+    </nav>
+</div>
+
+        <article>
+            
+<div class="project-header">
+<div class="title-row">
+  
+  <h1>Supassembler</h1>
+</div>
+
+  <span class="project-date">
+    <em>
+      Feb 2024 -  Present 
+    </em>
+  </span>
+
+
+</div>
+<section class="project-description">
+<p>A multi-ISA assembler in Rust.</p>
+<hr />
+<h2 id="the-problem">The Problem</h2>
+<p>This project initially started as a part of my <a href="/projects/jvm">JVM</a> to support its <abbr title="Just-In-Time">JIT</abbr> compiler.</p>
+<p>The intention is to create an assembler API that:</p>
+<ul>
+<li>Abstracts away raw instruction encoding</li>
+<li>Uses Rust’s type system to prevent invalid instruction operands, where possible</li>
+<li>Mimic the syntax of a standard assembler, like so:</li>
+</ul>
+<pre class="giallo" style="color: #D5CED9; background-color: #23262E;" ><code data-lang="rust"><span class="giallo-l"><span style="color: #C74DED;">static</span><span style="color: #EE5D43;"> HELLO_WORLD: &amp;</span><span>&#39;</span><span style="color: #FFE66D;">static CStr</span><span style="color: #EE5D43;"> =</span><span style="color: #00E8C6;"> c</span><span style="color: #96E072;">&quot;Hello, World!&quot;</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">static</span><span style="color: #EE5D43;"> HELLO_WORLD_LEN:</span><span style="color: #FFE66D;"> usize</span><span style="color: #EE5D43;"> = HELLO_WORLD.</span><span style="color: #FFE66D;">count_bytes</span><span>();</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C74DED;">const</span><span style="color: #EE5D43;"> STDOUT:</span><span style="color: #FFE66D;"> i8</span><span style="color: #EE5D43;"> =</span><span style="color: #F39C12;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">const</span><span style="color: #EE5D43;"> SYS_WRITE:</span><span style="color: #FFE66D;"> i8</span><span style="color: #EE5D43;"> =</span><span style="color: #F39C12;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">const</span><span style="color: #EE5D43;"> SYS_EXIT:</span><span style="color: #FFE66D;"> i8</span><span style="color: #EE5D43;"> =</span><span style="color: #F39C12;"> 60</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C74DED;">let mut</span><span style="color: #00E8C6;"> assembler</span><span style="color: #EE5D43;"> =</span><span style="color: #FFE66D;"> Assembler</span><span style="color: #EE5D43;">::</span><span style="color: #FFE66D;">new</span><span>();</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">// Print hello world</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">mov</span><span>(</span><span style="color: #00E8C6;">rdi</span><span>,</span><span style="color: #EE5D43;"> STDOUT</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">mov</span><span>(</span><span style="color: #00E8C6;">rsi</span><span>,</span><span style="color: #EE5D43;"> HELLO_WORLD</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">mov</span><span>(</span><span style="color: #00E8C6;">rdx</span><span>,</span><span style="color: #EE5D43;"> HELLO_WORLD_LEN</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">mov</span><span>(</span><span style="color: #00E8C6;">rax</span><span>,</span><span style="color: #EE5D43;"> SYS_WRITE</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">syscall</span><span>();</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">// Exit</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">mov</span><span>(</span><span style="color: #00E8C6;">rdi</span><span>,</span><span style="color: #F39C12;"> 0</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">mov</span><span>(</span><span style="color: #00E8C6;">rax</span><span>,</span><span style="color: #EE5D43;"> SYS_EXIT</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">assembler</span><span style="color: #EE5D43;">.</span><span style="color: #FFE66D;">syscall</span><span>();</span></span></code></pre>
+<hr />
+<h2 id="where-it-is-today">Where It is Today</h2>
+<p>The project has since been decoupled from the <a href="/projects/jvm">JVM</a>, and operates as a standalone crate.</p>
+<p>It currently supports <em>all</em> encodable <code>x86-64</code> instructions. I built a Python-based build system that parses the instruction
+set provided by <a rel="noopener external" target="_blank" href="https://github.com/intelxed/xed">Intel XED</a>, and auto-generates the Rust code for instruction and register encodings.</p>
+<hr />
+<h2 id="where-it-s-headed">Where It’s Headed</h2>
+<h3 id="multi-isa-support">Multi-ISA Support</h3>
+<p>Right now, the assembler is exclusively <code>x86-64</code>. I plan to introduce more backends as more architectures are supported by
+the <a href="/projects/jvm">JVM</a>, likely with <code>AArch64</code> coming next.</p>
+<h3 id="proc-macros">Proc-macros</h3>
+<p>While purely aesthetic, I’m interested in creating macros to abstract the assembler away entirely, like so:</p>
+<pre class="giallo" style="color: #D5CED9; background-color: #23262E;" ><code data-lang="rust"><span class="giallo-l"><span style="color: #C74DED;">static</span><span style="color: #EE5D43;"> HELLO_WORLD: &amp;</span><span>&#39;</span><span style="color: #FFE66D;">static CStr</span><span style="color: #EE5D43;"> =</span><span style="color: #00E8C6;"> c</span><span style="color: #96E072;">&quot;Hello, World!&quot;</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">static</span><span style="color: #EE5D43;"> HELLO_WORLD_LEN:</span><span style="color: #FFE66D;"> usize</span><span style="color: #EE5D43;"> = HELLO_WORLD.</span><span style="color: #FFE66D;">count_bytes</span><span>();</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C74DED;">const</span><span style="color: #EE5D43;"> STDOUT:</span><span style="color: #FFE66D;"> i8</span><span style="color: #EE5D43;"> =</span><span style="color: #F39C12;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">const</span><span style="color: #EE5D43;"> SYS_WRITE:</span><span style="color: #FFE66D;"> i8</span><span style="color: #EE5D43;"> =</span><span style="color: #F39C12;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #C74DED;">const</span><span style="color: #EE5D43;"> SYS_EXIT:</span><span style="color: #FFE66D;"> i8</span><span style="color: #EE5D43;"> =</span><span style="color: #F39C12;"> 60</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #FFE66D;">asm!</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">    // Print hello world</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    mov rdi</span><span>,</span><span style="color: #EE5D43;"> STDOUT</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    mov rsi</span><span>,</span><span style="color: #EE5D43;"> HELLO_WORLD</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    mov rdx</span><span>,</span><span style="color: #EE5D43;"> HELLO_WORLD_LEN</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    mov rax</span><span>,</span><span style="color: #EE5D43;"> SYS_WRITE</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    syscall</span><span>;</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #A0A1A7CC;">    // Exit</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    mov rdi</span><span>,</span><span style="color: #F39C12;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    mov rax</span><span>,</span><span style="color: #EE5D43;"> SYS_EXIT</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #00E8C6;">    syscall</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+</section>
+
+        </article>
+    </main>
+    <footer class="license-flyout">
+    <button id="license-toggle" class="license-toggle" aria-label="Toggle license information">
+        ©
+    </button>
+
+    <div id="license-content" class="license-content">
+        <p xmlns:cc="http://creativecommons.org/ns/">
+            <a rel="cc:attributionURL" href="https://www.sata.lol">This work</a> by
+            <span property="cc:attributionName">Serial-ATA</span> is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer">
+                CC BY 4.0
+                <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+                <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="" style="height: 16px; vertical-align: text-bottom; margin-left: 3px" />
+            </a>
+        </p>
+    </div>
+</footer>
+
+  </body>
+</html>
